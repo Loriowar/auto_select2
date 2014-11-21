@@ -1,0 +1,3 @@
+[submodule "vendor/assets/javascripts/select2"]
+	path = vendor/assets/javascripts/select2
+	url = git@github.com:ivaynberg/select2.git
