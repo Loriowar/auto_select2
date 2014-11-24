@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
     static, ajax and multi-ajax. Moreover this gem is foundation for other gems.
     For example for AutoSelect2Tab.
   DESC
-  spec.homepage      = "http://github.com/Loriowar/auto_select2/fork"
+  spec.homepage      = "https://github.com/Loriowar/auto_select2"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
