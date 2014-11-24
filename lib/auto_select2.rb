@@ -1,6 +1,6 @@
 require 'auto_select2/version'
 require 'auto_select2/helpers'
-require 'select2_search_adapters/search_adapter'
+require 'select2_search_adapter/base'
 
 module AutoSelect2
   class Engine < ::Rails::Engine

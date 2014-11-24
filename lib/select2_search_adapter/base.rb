@@ -1,5 +1,5 @@
-module Select2SearchAdapters
-  class SearchAdapter
+module Select2SearchAdapter
+  class Base
     class << self
       # Amount rows per ajax-request
       def limit

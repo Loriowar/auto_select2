@@ -1,7 +1,7 @@
 class Select2AutocompletesController < ApplicationController
   def search
     begin
-      adapter = "::Select2SearchAdapters::#{params[:class_name].camelize}SearchAdapter".constantize
+      adapter = "::Select2SearchAdapter::#{params[:class_name].camelize}SearchAdapter".constantize
     rescue NameError
       render json: {error: "not found search adapter for '#{params[:class_name]}'"}.to_json,
              status: 500
