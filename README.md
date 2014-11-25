@@ -5,6 +5,8 @@ for initialize different select2 elements: static, ajax and multi-ajax.
 
 The `AutoSelect2` based on [select2-rails](https://github.com/argerim/select2-rails) gem.
 
+[![Gem Version](https://badge.fury.io/rb/auto_select2.png)](http://badge.fury.io/rb/auto_select2)
+
 ## Installation
 
 ### First
@@ -161,7 +163,7 @@ parameter specify url for ajax load select options. You can use helper
               count = default_count(SystemRole, term)
               {
                   items: roles.map do |role|
-                    { text: role.name, id: role.id.to_s }
+                    { text: role.name, id: role.id.to_s } # here is optional parameter 'class_name'
                   end,
                   total: count
               }
@@ -210,12 +212,23 @@ additional values. It construct from name and value of html-elements. Example:
 Here we initialize ajax select2 and during load select variants in `SearchAdapter` options hash
 appear key :token with value 'VUBJKB23UIVI1UU1VOBVI@'.
 
+Third, in hash with items from search method exist additional optional parameter `class_name`.
+This parameter specify css-class for result element in select2. It useful for show different
+icons for different select variants.
+
 ### Multi ajax select2 usage
 
 This feature require absolutely same things as ajax select2. Additionally you must
 add `multiple` css-class for input element, doesn't forget about
 `multi_ajax_select2_value_parser.js` script and pass `multiple: true` into
 data-attribute `s2options`.
+
+### Different multi ajax select2
+
+Honestly speaking you can just pass `multiple: true` into data-attribute `s2options` and
+ajax-select2 become multiple. But in this case selected options from select2 become as
+comma separated string. As opposed to it `multi_ajax_select2_value_parser.js` make array
+of multiple ids. This is more comfortable for use in controller.
 
 ## Contributing
 
