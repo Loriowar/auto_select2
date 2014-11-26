@@ -92,9 +92,9 @@ scripts on a single page. Example of usage in a view:
 Second variant: include files in javascript asset. For this add the
 following to your `app/assets/javascripts/application.js`:
 
-    //= require static_select2
-    //= require ajax_select2
-    //= require multi_ajax_select2_value_parser
+    //= require auto_select2/static_select2
+    //= require auto_select2/ajax_select2
+    //= require auto_select2/multi_ajax_select2_value_parser
 
 ### Select2 options
 
