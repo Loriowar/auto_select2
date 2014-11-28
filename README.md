@@ -55,6 +55,10 @@ Use [AutoSelect2Tag](https://github.com/Loriowar/auto_select2_tag). It provide h
 
 and you can define select2 element like any other view elements in rails.
 
+## Example
+
+You can find example project [here](https://github.com/Loriowar/auto-select2_tag_example).
+
 ## Usage
 
 ### Element types
@@ -229,6 +233,12 @@ Honestly speaking you can just pass `multiple: true` into data-attribute `s2opti
 ajax-select2 become multiple. But in this case selected options from select2 become as
 comma separated string. As opposed to it `multi_ajax_select2_value_parser.js` make array
 of multiple ids. This is more comfortable for use in controller.
+
+### Initializing
+
+Scripts automatically initialize on `$(document).ready()` and after `ajaxSuccess`. If you
+for any reasons want to manual initializing select2, you must call `initAutoAjaxSelect2()`
+and/or `initAutoStaticSelect2()`.
 
 ## Contributing
 

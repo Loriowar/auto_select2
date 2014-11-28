@@ -66,26 +66,22 @@ module Select2SearchAdapter
         if ids.size > 1
           result = []
           ids.each do |id|
-            item = searched_class.find_by_id(id)
+            item = searched_class.where(searched_class.primary_key => id).first
             if item.present?
               result << get_select2_hash(item, title_method, id)
             end
           end
           result
         elsif ids.size == 1
-          item = searched_class.find_by_id(ids[0])
-          if item.present?
-            get_select2_hash(item, title_method, ids[0])
-          else
-            nil
-          end
+          item = searched_class.where(searched_class.primary_key => ids[0]).first
+          get_select2_hash(item, title_method, ids[0]) if item.present?
         else
           nil
         end
       end
 
       def get_select2_hash(item, title_method, id)
-        if item.respond_to?(:to_select2) && title_method.nil?
+        if item.respond_to?(:to_select2) && title_method.blank?
           item.to_select2
         else
           title_method ||= :name
