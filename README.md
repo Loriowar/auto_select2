@@ -26,25 +26,25 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install auto-select2
-
 ### Third
+
+Select one of ways to include js in pipeline. Ways described below in section `Javascript include variants`
+
+### Fourth
 
 Check controller and route collation. Gem contain controller `Select2AutocompletesController` and
 route
 
     get 'select2_autocompletes/:class_name'
 
-### Fourth
+### Fifth
 
-Prepare folder `app/lib/select2_search_adapter` if you want to use `ajax-select2`. This folder needed
+Prepare folder `app/select2_search_adapter` if you want to use `ajax-select2`. This folder needed
 for storage custom `SearchAdapter`.
 
 ## Compatibility
 
-Gem tested in Rails 3.2. But there is a great probability that this worked in Rails 4 too.
+Gem tested and works in Rails 3.2 and Rails 4.0. You can test compatibility with other versions by yourself.
 
 ## Easiest way to use
 
@@ -118,9 +118,9 @@ For initialize ajax select 2 you must set `auto-ajax-select2` css-class for hidd
 Moreover you must create `SearchAdapter` for your ajax-select2 element. This adapter has
 following requirements:
 
-* must be inherited from `Select2SearchAdapter::Base`
-* must be put in module `Select2SearchAdapter`
-* name of a adapter must end with `SearchAdapter`
+* class must be inherited from `Select2SearchAdapter::Base`
+* file must be put in folder `app/select2_search_adapter`
+* name of a adapter class must end with `SearchAdapter`
 * must has function `search_default(term, page, options)`
   (description of the function and return value goes below)
 
@@ -149,7 +149,8 @@ element with 42 variants. Function `search_default` return part of it in `items`
 * `default_count(searched_class, term, options = {})`
 * `get_init_values(searched_class, ids, title_method=nil)`
 
-More about this function you can find in example below and in source code.
+More about this function you can find in [example project](https://github.com/Loriowar/auto-select2_tag_example),
+in example below and in source code.
 
 Finally hidden-input must has `:href` parameter in data-attribute `s2options`. This
 parameter specify url for ajax load select options. You can use helper
@@ -157,23 +158,20 @@ parameter specify url for ajax load select options. You can use helper
     select2_autocompletes_path(class_name: MyClassName)
 
 ### Example of minimalistic SearchAdapter
-
-    module Select2SearchAdapter
-      class SystemRoleSearchAdapter < Base
-        class << self
-          def search_default(term, page, options)
-            if options[:init].nil?
-              roles = default_finder(SystemRole, term, page: page)
-              count = default_count(SystemRole, term)
-              {
-                  items: roles.map do |role|
-                    { text: role.name, id: role.id.to_s } # here is optional parameter 'class_name'
-                  end,
-                  total: count
-              }
-            else
-              get_init_values(SystemRole, options[:item_ids])
-            end
+    class SystemRoleSearchAdapter < Select2SearchAdapter::Base
+      class << self
+        def search_default(term, page, options)
+          if options[:init].nil?
+            roles = default_finder(SystemRole, term, page: page)
+            count = default_count(SystemRole, term)
+            {
+              items: roles.map do |role|
+                { text: role.name, id: role.id.to_s } # here is optional parameter 'class_name'
+              end,
+              total: count
+            }
+          else
+            get_init_values(SystemRole, options[:item_ids])
           end
         end
       end
