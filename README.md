@@ -115,10 +115,11 @@ For initialize static select2 you must set `auto-static-select2` css-class for s
 ### Ajax select2 usage
 
 For initialize ajax select 2 you must set `auto-ajax-select2` css-class for hidden-input element.
-Moreover you must create `SearchAdapter` for your ajax-select2 element. This adapter has
-following requirements:
+Then you have two ways. Easy way for simple selection: specify `default_class_name`, `default_text_column` and
+`default_id_column` as params for `:href` within data-attribute `s2options` (look at the end of this section).
+Other way for custom selection: create `SearchAdapter`. This adapter has following requirements:
 
-* class must be inherited from `Select2SearchAdapter::Base`
+* class must be inherited from `AutoSelect2::Select2SearchAdapter::Base`
 * file must be put in folder `app/select2_search_adapter`
 * name of a adapter class must end with `SearchAdapter`
 * must has function `search_default(term, page, options)`
@@ -155,10 +156,15 @@ in example below and in source code.
 Finally hidden-input must has `:href` parameter in data-attribute `s2options`. This
 parameter specify url for ajax load select options. You can use helper
 
-    select2_autocompletes_path(class_name: MyClassName)
+    select2_autocompletes_path(class_name: :my_class_name)
+or
+
+    select2_autocompletes_path(default_class_name: my_class,
+                               default_text_column: :name,
+                               default_id_column: :id)
 
 ### Example of minimalistic SearchAdapter
-    class SystemRoleSearchAdapter < Select2SearchAdapter::Base
+    class SystemRoleSearchAdapter < AutoSelect2::Select2SearchAdapter::Base
       class << self
         def search_default(term, page, options)
           if options[:init].nil?
@@ -234,9 +240,10 @@ of multiple ids. This is more comfortable for use in controller.
 
 ### Initializing
 
-Scripts automatically initialize on `$(document).ready()` and after `ajaxSuccess`. If you
-for any reasons want to manual initializing select2, you must call `initAutoAjaxSelect2()`
-and/or `initAutoStaticSelect2()`.
+Scripts automatically initialize on `$(document).ready()` and after `ajaxSuccess`. Moreover
+script handle [cocoon](https://github.com/nathanvda/cocoon) events and run on
+`cocoon:after-insert`. If you for any reasons want to manually initializing select2,
+you can call `initAutoAjaxSelect2()` and/or `initAutoStaticSelect2()`.
 
 ## Contributing
 
