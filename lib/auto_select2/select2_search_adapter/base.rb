@@ -45,7 +45,9 @@ module AutoSelect2
         def default_search_conditions(term, basic_conditions, columns)
           term_filter = ''
           conditions = []
-          columns = [columns] unless columns.is_a?(Array)
+          unless columns.is_a?(Array)
+            columns = columns.split(/[\s,]+/)
+          end
           unless term.nil?
             words = term.split(' ')
             words.each_with_index do |word, index|
