@@ -11,17 +11,26 @@ module AutoSelect2
 
           if options[:init].nil?
             default_values = default_finder(default_arel, term, page: page,
-                                                                column: options[:default_text_column])
-            default_count = default_count(default_arel, term, column: options[:default_text_column])
+                                                                columns: options[:default_text_column])
+            default_count = default_count(default_arel, term, columns: options[:default_text_column])
             {
                 items: default_values.map do |default_value|
-                  { text: default_value.public_send(options[:default_text_column]),
-                    id: default_value.public_send(options[:default_id_column]) }
+                  get_select2_hash(
+                      default_value,
+                      nil,
+                      options[:default_id_column],
+                      options[:default_text_column]
+                  )
                 end,
                 total: default_count
             }
           else
-            get_init_values(default_arel, options[:item_ids], id_column: options[:default_id_column])
+            get_init_values(
+                default_arel,
+                options[:item_ids],
+                id_column: options[:default_id_column],
+                text_column: options[:default_text_column]
+            )
           end
         end
       end

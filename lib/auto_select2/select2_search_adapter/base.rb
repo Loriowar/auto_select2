@@ -18,8 +18,8 @@ module AutoSelect2
       private
 
         def default_finder(searched_class, term, options)
-          column = options[:column].present? ? options[:column] : 'name'
-          conditions = default_search_conditions(term, options[:basic_conditions], column)
+          columns = options[:columns].present? ? options[:columns] : 'name'
+          conditions = default_search_conditions(term, options[:basic_conditions], columns)
           if term.nil?
             [ searched_class.where(options[:basic_conditions]) ]
           else
@@ -28,7 +28,7 @@ module AutoSelect2
               page = options[:page].to_i > 0 ? options[:page].to_i : 1
               skip_count = limit * ( page - 1 )
             end
-            query = searched_class.where( conditions ).limit( limit ).offset(skip_count).order(column)
+            query = searched_class.where( conditions ).limit( limit ).offset(skip_count).order(columns)
             query = query.select(options[:select]) if options[:select].present?
             options[:uniq] ? query.uniq : query
           end
@@ -66,6 +66,7 @@ module AutoSelect2
 
         def get_init_values(searched_class, ids, options = {})
           title_method = options[:title_method]
+          text_columns = options[:text_column]
           id_column = options[:id_column] || searched_class.primary_key
           ids = ids.split(',')
           if ids.size > 1
@@ -73,24 +74,25 @@ module AutoSelect2
             ids.each do |id|
               item = searched_class.where(id_column => id).first
               if item.present?
-                result << get_select2_hash(item, title_method, id)
+                result << get_select2_hash(item, title_method, id_column, text_columns)
               end
             end
             result
           elsif ids.size == 1
             item = searched_class.where(id_column => ids[0]).first
-            get_select2_hash(item, title_method, ids[0]) if item.present?
+            get_select2_hash(item, title_method, id_column, text_columns) if item.present?
           else
             nil
           end
         end
 
-        def get_select2_hash(item, title_method, id)
+        def get_select2_hash(item, title_method, id_column, text_columns)
           if item.respond_to?(:to_select2) && title_method.blank?
             item.to_select2
           else
+            title_method ||= text_columns.split(/[\s,]+/).first
             title_method ||= :name
-            { text: item.public_send(title_method), id: id }
+            { text: item.public_send(title_method), id: item.public_send(id_column) }
           end
         end
       end
