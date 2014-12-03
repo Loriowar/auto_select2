@@ -18,7 +18,7 @@ module AutoSelect2
       private
 
         def default_finder(searched_class, term, options)
-          columns = options[:columns].present? ? options[:columns] : 'name'
+          columns = options[:column].present? ? options[:column] : 'name'
           conditions = default_search_conditions(term, options[:basic_conditions], columns)
           if term.nil?
             [ searched_class.where(options[:basic_conditions]) ]
