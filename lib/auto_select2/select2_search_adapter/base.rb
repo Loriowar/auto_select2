@@ -65,34 +65,42 @@ module AutoSelect2
         end
 
         def get_init_values(searched_class, ids, options = {})
-          title_method = options[:title_method]
-          text_columns = options[:text_column]
-          id_column = options[:id_column] || searched_class.primary_key
+          hash_method = options[:hash_method]
+          text_columns = options[:default_text_column]
+          id_column = options[:default_id_column] || searched_class.primary_key
           ids = ids.split(',')
           if ids.size > 1
             result = []
             ids.each do |id|
               item = searched_class.where(id_column => id).first
               if item.present?
-                result << get_select2_hash(item, title_method, id_column, text_columns)
+                result << get_select2_hash(item, hash_method, id_column, text_columns)
               end
             end
             result
           elsif ids.size == 1
             item = searched_class.where(id_column => ids[0]).first
-            get_select2_hash(item, title_method, id_column, text_columns) if item.present?
+            get_select2_hash(item, hash_method, id_column, text_columns) if item.present?
           else
             nil
           end
         end
 
-        def get_select2_hash(item, title_method, id_column, text_columns)
-          if item.respond_to?(:to_select2) && title_method.blank?
-            item.to_select2
+        def get_select2_hash(item, hash_method, id_column, text_columns)
+          if hash_method.present? && item.respond_to?(hash_method)
+            item.public_send(hash_method)
           else
-            title_method ||= text_columns.split(/[\s,]+/).first
-            title_method ||= :name
-            { text: item.public_send(title_method), id: item.public_send(id_column) }
+            if item.respond_to?(:to_select2)
+              item.to_select2
+            else
+              label_method = text_columns.split(/[\s,]+/).first
+              label_method ||= :name
+              if item.respond_to?(label_method)
+                { text: item.public_send(label_method), id: item.public_send(id_column) }
+              else
+                return { error: 'not found label method' }
+              end
+            end
           end
         end
       end

@@ -17,7 +17,7 @@ module AutoSelect2
                 items: default_values.map do |default_value|
                   get_select2_hash(
                       default_value,
-                      nil,
+                      options[:hash_method],
                       options[:default_id_column],
                       options[:default_text_column]
                   )
@@ -28,8 +28,7 @@ module AutoSelect2
             get_init_values(
                 default_arel,
                 options[:item_ids],
-                id_column: options[:default_id_column],
-                text_column: options[:default_text_column]
+                options
             )
           end
         end

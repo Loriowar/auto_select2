@@ -1,9 +1,40 @@
 jQuery ($) ->
-  format = (item)->
+  itemResultCssClass = (item)->
+    cssClass = ''
+    if item.class_name != undefined
+      cssClass = item.class_name
+    cssClass
+
+  itemSelectionCssClass = (item)->
+    cssClass = ''
+    if item != null && item.selection_class_name != undefined
+      cssClass = item.selection_class_name
+    else if item != null
+      cssClass = itemResultCssClass(item)
+    cssClass
+
+  formatResult = (item)->
     result = item.text
     if item.class_name != undefined
-      result = '<span class="'+item.class_name+'">'+item.text+'</span>'
+      classes = item.class_name.split(' ')
+      classes = classes.map (origClass)->
+        'in-' + origClass
+      result = '<span class="'+classes.join(' ')+'">'+item.text+'</span>'
     result
+
+  formatSelection = (item)->
+    result = item.text
+    classes = item.selection_class_name
+    if classes == undefined
+      classes = item.class_name
+    if classes != undefined
+      classes = classes.split(' ')
+#      INFO: Turn on this if formatSelectionCssClass enabled
+#      classes = classes.map (origClass)->
+#        'in-' + origClass
+      result = '<span class="'+classes.join(' ')+'">'+item.text+'</span>'
+    result
+
   window.initAutoAjaxSelect2 = ->
     $inputs = $('input.auto-ajax-select2').not('.select2-offscreen')
     $inputs.each ->
@@ -13,8 +44,11 @@ jQuery ($) ->
       s2DefaultOptions = {
         allowClear: true
         multiple: false
-        formatSelection: format
-        formatResult: format
+        formatSelection: formatSelection
+        formatResult: formatResult
+#        INFO: Not documented feature of select2 library, worked very well, but not clearing classes after item removing
+#        formatSelectionCssClass: itemSelectionCssClass
+        formatResultCssClass: itemResultCssClass
         ajax: {
           url: path,
           dataType: 'json',
@@ -44,11 +78,13 @@ jQuery ($) ->
           id = $element.val()
           initText = $element.data('init-text')
           initClassName = $element.data('init-class-name')
+          initSelectionClassName = $element.data('init-selection-class-name')
           if (id != '')
             if initText != undefined
               params = { id: id, text: initText }
               if initClassName != undefined
                 params.class_name = initClassName
+                params.selection_class_name = initSelectionClassName
               callback(params)
             else
               $.ajax(path, {
