@@ -85,15 +85,15 @@ You have two ways to include javascript files. First: in gem presents helper met
 * ajax_select2_init_header_tags
 * ajax_multi_select2_init_header_tags
 
-This helpers call `javascript_include_tag` and it is useful for initialize select2
+These helpers call `javascript_include_tag` and it is useful for initialize select2
 scripts on a single page. Example of usage in a view:
 
     - static_select2_init_header_tags
     
     %div
-      = select_tag :my_select, my_options_for_select, class: 'small'
+      = select2_tag :my_select, my_options_for_select, class: 'small'
 
-Second variant: include files in javascript asset. For this add the
+Second variant: include files in javascript assets. For this add the
 following to your `app/assets/javascripts/application.js`:
 
     //= require auto_select2/static_select2
