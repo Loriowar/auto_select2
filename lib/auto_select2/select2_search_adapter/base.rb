@@ -93,8 +93,7 @@ module AutoSelect2
             if item.respond_to?(:to_select2)
               item.to_select2
             else
-              label_method = text_columns.split(/[\s,]+/).first
-              label_method ||= :name
+              label_method = text_columns.to_s.split(/[\s,]+/).first || :name
               if item.respond_to?(label_method)
                 { text: item.public_send(label_method), id: item.public_send(id_column) }
               else
