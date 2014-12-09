@@ -144,7 +144,7 @@ Here in total must be specified amount of all select variants. For example you h
 element with 42 variants. Function `search_default` return part of it in `items` and in
 `total` each time you must set 42.
 
-**TIP:** in `search_default` you can use functions from `Select2SearchAdapter::Base`:
+**TIP:** in `search_default` you can use functions from `AutoSelect2::Select2SearchAdapter::Base`:
 
 * `default_finder(searched_class, term, options)`
 * `default_count(searched_class, term, options = {})`
