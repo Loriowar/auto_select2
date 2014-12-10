@@ -20,7 +20,7 @@ on `select2-rails` page.
 
 Add this line to your application's Gemfile:
 
-    gem 'auto-select2'
+    gem 'auto_select2'
 
 And then execute:
 
