@@ -65,6 +65,7 @@ jQuery ($) ->
                   $el = $(el)
                   paramsCollection[$el.attr('name')] = $el.val()
                   return
+                $.extend(paramsCollection, additionalAjaxData['params'])
                 delete paramsCollection[$this.attr('name')]
 
             return $.extend({}, paramsCollection, ajaxData)
