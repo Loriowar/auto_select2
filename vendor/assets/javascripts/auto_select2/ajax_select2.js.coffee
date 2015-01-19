@@ -39,13 +39,23 @@ jQuery ($) ->
     $inputs = $('input.auto-ajax-select2').not('.select2-offscreen')
     $inputs.each ->
       $input = $(this)
-      path = $input.data('href')
-      limit = $input.data('limit') || 25
+      path = $input.data('s2-href')
+      limit = $input.data('s2-limit') || 25
+      customFormatSelection = $input.data('s2-format-selection')
+      customFormatResult = $input.data('s2-format-result')
+      if customFormatSelection isnt `undefined` && (window[customFormatSelection] isnt `undefined`)
+        formatSelectionFunc = window[customFormatSelection]
+      else
+        formatSelectionFunc = formatSelection
+      if (customFormatResult isnt `undefined`) && (window[customFormatResult] isnt `undefined`)
+        formatResultFunc = window[customFormatResult]
+      else
+        formatResultFunc = formatResult
       s2DefaultOptions = {
         allowClear: true
         multiple: false
-        formatSelection: formatSelection
-        formatResult: formatResult
+        formatSelection: formatSelectionFunc
+        formatResult: formatResultFunc
 #        INFO: Not documented feature of select2 library, worked very well, but not clearing classes after item removing
 #        formatSelectionCssClass: itemSelectionCssClass
         formatResultCssClass: itemResultCssClass
@@ -56,7 +66,7 @@ jQuery ($) ->
             ajaxData = { term: term, page: page }
             $this = $(this.context)
 
-            additionalUserData = $this.data('s2options')
+            additionalUserData = $this.data('s2-options')
             paramsCollection = {}
             if additionalUserData isnt `undefined`
               additionalAjaxData = additionalUserData['additional_ajax_data']
@@ -100,7 +110,7 @@ jQuery ($) ->
               )
       }
 
-      s2UserOptions = $input.data("s2options")
+      s2UserOptions = $input.data("s2-options")
 
       if s2UserOptions is `undefined`
         s2FullOptions = $.extend({}, s2DefaultOptions)
