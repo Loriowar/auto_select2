@@ -103,7 +103,7 @@ following to your `app/assets/javascripts/application.js`:
 ### Select2 options
 
 If you want to specify any parameters for [select2 constructor](http://ivaynberg.github.io/select2/)
-you can pass it as hash into data-attribute `s2options`. This parameter handle most options
+you can pass it as hash into data-attribute `s2-options`. This parameter handle most options
 but you can't pass through js-functions.
 
 ### Static select2 usage
@@ -116,7 +116,7 @@ For initialize static select2 you must set `auto-static-select2` css-class for s
 
 For initialize ajax select 2 you must set `auto-ajax-select2` css-class for hidden-input element.
 Then you have two ways. Easy way for simple selection: specify `default_class_name`, `default_text_column` and
-`default_id_column` as params for `:href` within data-attribute `s2options` (look at the end of this section).
+`default_id_column` as params for `:href` within data-attribute `s2-options` (look at the end of this section).
 Other way for custom selection: create `SearchAdapter`. This adapter has following requirements:
 
 * class must be inherited from `AutoSelect2::Select2SearchAdapter::Base`
@@ -153,7 +153,7 @@ element with 42 variants. Function `search_default` return part of it in `items`
 More about this function you can find in [example project](https://github.com/Loriowar/auto-select2_tag_example),
 in example below and in source code.
 
-Finally hidden-input must has `:href` parameter in data-attribute `s2options`. This
+Finally hidden-input must has `:href` parameter in data-attribute `s2-options`. This
 parameter specify url for ajax load select options. You can use helper
 
     select2_autocompletes_path(class_name: :my_class_name)
@@ -198,7 +198,7 @@ near the `search_default` in `SearchAdapter`. Requirement for non-default search
 * it must has same behavior as search_default
 * name of methods must start with `search_`
 
-For use custom searcher specify it into `:href` within data-attribute `s2options`:
+For use custom searcher specify it into `:href` within data-attribute `s2-options`:
 
     select2_autocompletes_path(class_name: MyClassName, search_method: :unusual_case)
 
@@ -207,13 +207,13 @@ select options depend from another field on page. For this purpose you can speci
 
     additional_ajax_data: {selector: 'input.css-class'}
 
-inside data-attribute `s2options`. In this case in options of `SearchAdapter` appear
+inside data-attribute `s2-options`. In this case in options of `SearchAdapter` appear
 additional values. It construct from name and value of html-elements. Example:
 
     = hidden_field_tag 'token', 'VUBJKB23UIVI1UU1VOBVI@', class: 'add-to-select2'
     = hidden_field_tag 'select2element', '',
                         class: 'auto-ajax-select2',
-                        data: {s2options: { href: select2_autocompletes_path(class_name: :adapter_name,
+                        data: {s2-options: { href: select2_autocompletes_path(class_name: :adapter_name,
                                                                              search_method: :unusual_case),
                                             additional_ajax_data: {selector: '.add-to-select2'}}}
 
@@ -229,11 +229,11 @@ icons for different select variants.
 This feature require absolutely same things as ajax select2. Additionally you must
 add `multiple` css-class for input element, doesn't forget about
 `multi_ajax_select2_value_parser.js` script and pass `multiple: true` into
-data-attribute `s2options`.
+data-attribute `s2-options`.
 
 ### Different multi ajax select2
 
-Honestly speaking you can just pass `multiple: true` into data-attribute `s2options` and
+Honestly speaking you can just pass `multiple: true` into data-attribute `s2-options` and
 ajax-select2 become multiple. But in this case selected options from select2 become as
 comma separated string. As opposed to it `multi_ajax_select2_value_parser.js` make array
 of multiple ids. This is more comfortable for use in controller.
