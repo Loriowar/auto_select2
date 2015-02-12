@@ -22,5 +22,11 @@ module AutoSelect2
       end
     end
 
+    def data_select2_init_head_tags
+      unless @select2_data_script_included
+        @select2_data_script_included = true
+        javascript_include_tag('auto_select2/data_select2')
+      end
+    end
   end
 end
