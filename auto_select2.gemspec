@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "auto_select2"
   spec.version       = AutoSelect2::VERSION
   spec.authors       = ["Dmitriy Lisichkin", "Ivan Zabrovskiy"]
-  spec.email         = ["dima@sb42.ru", "lorowar@gmail.com"]
+  spec.email         = ["dima@sb42.ru", "loriowar@gmail.com"]
   spec.summary       = %q{Base methods for wrapping a Select2 and easy initialize it.}
   spec.description   = <<-DESC
     Gem provide scripts and helpers for initialize different select2 elements:
