@@ -220,6 +220,27 @@ additional values. It construct from name and value of html-elements. Example:
 Here we initialize ajax select2 and during load select variants in `SearchAdapter` options hash
 appear key :token with value 'VUBJKB23UIVI1UU1VOBVI@'.
 
+Moreover you may pass name of js function into additional_ajax_data:
+
+    additional_ajax_data: {selector: 'input.css-class',
+                           function: 'additionalGlobalJsFunctionForRequestParameters'}
+
+In this case function `additionalGlobalJsFunctionForRequestParameters` must looks follows:
+
+    window.additionalGlobalJsFunctionForRequestParameters = function($element, $term) {
+    
+      // any js actions
+    
+      return {
+        additional_param: '42',
+        awesome_option: 'something especial'
+      };
+    }
+
+As you see, function receive two arguments: select2_element (i.e. initial input field) and
+term (i.e. text from input). Return value of the function must be a hash. This hash merged into
+ajax data and can be obtained in `SearchAdapter`.
+
 Third, in hash with items from search method exist additional optional parameter `class_name`.
 This parameter specify css-class for result element in select2. It useful for show different
 icons for different select variants.
