@@ -36,6 +36,7 @@ jQuery ($) ->
     result
 
   window.initAutoAjaxSelect2 = ->
+    # @todo: need to refactor this hell
     $inputs = $('input.auto-ajax-select2').not('.select2-offscreen')
     $inputs.each ->
       $input = $(this)
@@ -71,11 +72,13 @@ jQuery ($) ->
             if additionalUserData isnt `undefined`
               additionalAjaxData = additionalUserData['additional_ajax_data']
               if additionalAjaxData isnt `undefined`
+                if typeof window[additionalAjaxData['function']] == "function"
+                  functionCollection = window[additionalAjaxData['function']]($input, term)
                 $(additionalAjaxData['selector']).each (index, el) ->
                   $el = $(el)
                   paramsCollection[$el.attr('name')] = $el.val()
                   return
-                $.extend(paramsCollection, additionalAjaxData['params'])
+                $.extend(paramsCollection, additionalAjaxData['params'], functionCollection)
                 delete paramsCollection[$this.attr('name')]
 
             return $.extend({}, paramsCollection, ajaxData)
