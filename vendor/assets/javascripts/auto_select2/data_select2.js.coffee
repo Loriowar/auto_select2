@@ -15,6 +15,7 @@ jQuery ($) ->
       })
       return
     return
+  initAutoDataSelect2()
 
 
   $body = $('body')
