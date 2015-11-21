@@ -3,34 +3,52 @@ module AutoSelect2
     class Default < Base
       class << self
         def search_default(term, page, options)
-          begin
-            default_arel = options[:default_class_name].camelize.constantize
-          rescue NameError
-            return {error: "not found class '#{options[:default_class_name]}'"}.to_json
+          if @searchable_class.blank? || @id_column.blank? || @text_columns.blank?
+            raise_not_implemented
           end
-
           if options[:init].nil?
-            default_values = default_finder(default_arel, term, page: page,
-                                                                column: options[:default_text_column])
-            default_count = default_count(default_arel, term, column: options[:default_text_column])
+            default_values = default_finder(@searchable_class, term, page: page, column: @text_columns)
+            default_count = default_count(@searchable_class, term, column: @text_columns)
             {
                 items: default_values.map do |default_value|
                   get_select2_hash(
                       default_value,
-                      options[:hash_method],
-                      options[:default_id_column],
-                      options[:default_text_column]
+                      @select2_hash_method,
+                      @id_column,
+                      @text_columns
                   )
                 end,
                 total: default_count
             }
           else
             get_init_values(
-                default_arel,
+                @searchable_class,
                 options[:item_ids],
                 options
             )
           end
+        end
+
+        private
+
+        def searchable_class(klass)
+          @searchable_class = klass
+        end
+
+        def id_column(id_column)
+          @id_column = id_column
+        end
+
+        def text_columns(*column_names)
+          @text_columns = column_names
+        end
+
+        def hash_method(method_sym)
+          @select2_hash_method = method_sym
+        end
+
+        def raise_not_implemented
+          raise NotImplementedError, 'You need to implement your own SearchAdapter. Use generator'
         end
       end
     end

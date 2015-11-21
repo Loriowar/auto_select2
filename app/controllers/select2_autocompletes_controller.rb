@@ -3,8 +3,6 @@ class Select2AutocompletesController < ApplicationController
     begin
       if params[:class_name].present?
         adapter = "::#{params[:class_name].camelize}SearchAdapter".constantize
-      elsif params[:default_class_name].present?
-        adapter = ::AutoSelect2::Select2SearchAdapter::Default
       else
         render json: {error: "not enough search parameters'"}.to_json,
                status: 500
