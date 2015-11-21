@@ -48,7 +48,8 @@ module AutoSelect2
         end
 
         def raise_not_implemented
-          raise NotImplementedError, 'You need to implement your own SearchAdapter. Use generator'
+          raise NotImplementedError,
+                'You need to implement your own SearchAdapter. Use: `rails generate auto_select2:search_adapter`'
         end
       end
     end

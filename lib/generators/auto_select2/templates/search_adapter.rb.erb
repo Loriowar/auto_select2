@@ -1,0 +1,6 @@
+class <%= name.classify %>SearchAdapter < AutoSelect2::Select2SearchAdapter::Default
+  searchable_class <%= name.classify %>
+  id_column :<%= id_column %>
+  text_columns <%= text_columns.join(', ') %>
+  <% if hash_method.present? %>hash_method :<%= hash_method %><% end %>
+end
