@@ -6,21 +6,21 @@ module AutoSelect2
       class_option :destination_path,
                    type: :string,
                    default: 'app/select2_search_adapters',
-                   desc: 'path where need to put generated class',
+                   desc: 'Path for storing SearchAdapter classes',
                    banner: 'lib/search_adapters'
       class_option :id_column,
                    type: :string,
-                   desc: 'column of your model that will be sent to select2 as `id`',
+                   desc: 'Name of model column with identifier (i.e. id)',
                    banner: 'id',
                    required: true
       class_option :text_columns,
                    type: :array,
-                   desc: 'columns of your model involved in search process',
+                   desc: 'Column for searching by',
                    banner: 'lastname firstname',
                    required: true
       class_option :hash_method,
                    type: :string,
-                   desc: 'Method of your model that return a Hash that will be transported to select2',
+                   desc: 'Instance method of model for converting into Hash for transporting into select2',
                    banner: 'to_select2'
 
       desc 'Creates SearchAdapter classes for your models'
@@ -36,7 +36,13 @@ module AutoSelect2
       end
 
       def text_columns
-        options[:text_columns].map { |c| ":#{c}" }
+        options[:text_columns].map do |c|
+          if c.underscore == c
+            ":#{c}"
+          else
+            "\"#{c}\""
+          end
+        end
       end
 
       def hash_method
