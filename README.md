@@ -115,12 +115,10 @@ For initialize static select2 you must set `auto-static-select2` css-class for s
 ### Ajax select2 usage
 
 For initialize ajax select 2 you must set `auto-ajax-select2` css-class for hidden-input element.
-Then you have two ways. Easy way for simple selection: specify `default_class_name`, `default_text_column` and
-`default_id_column` as params for `:href` within data-attribute `s2-options` (look at the end of this section).
-Other way for custom selection: create `SearchAdapter`. This adapter has following requirements:
+Then you need to create a `SearchAdapter`. This adapter has following requirements:
 
 * class must be inherited from `AutoSelect2::Select2SearchAdapter::Base`
-* file must be put in folder `app/select2_search_adapter`
+* file must be put in any folder which included into autoload path, preferably in `app/select2_search_adapter`
 * name of a adapter class must end with `SearchAdapter`
 * must has function `search_default(term, page, options)`
   (description of the function and return value goes below)
@@ -140,7 +138,7 @@ Returned value of `search_default` function must be follow:
       total: count
     }
 
-Here in total must be specified amount of all select variants. For example you have select
+Here in "total" must be specified amount of all select variants. For example you have select
 element with 42 variants. Function `search_default` return part of it in `items` and in
 `total` each time you must set 42.
 
@@ -154,16 +152,19 @@ More about this function you can find in [example project](https://github.com/Lo
 in example below and in source code.
 
 Finally hidden-input must has `:href` parameter in data-attribute `s2-options`. This
-parameter specify url for ajax load select options. You can use helper
-
-    select2_autocompletes_path(class_name: :my_class_name)
-or
-
-    select2_autocompletes_path(default_class_name: my_class,
-                               default_text_column: :name,
-                               default_id_column: :id)
+parameter specify url for ajax load select options. You can use path-helper `select2_autocompletes_path` for this purpose.
 
 ### Example of minimalistic SearchAdapter
+
+    class SystemRoleSearchAdapter < AutoSelect2::Select2SearchAdapter::Default
+      searchable_class SystemRole
+      id_column :id
+      text_columns: :name
+      hash_method :to_select2 # optional
+    end
+
+More complex example:
+
     class SystemRoleSearchAdapter < AutoSelect2::Select2SearchAdapter::Base
       class << self
         def search_default(term, page, options)
@@ -182,6 +183,18 @@ or
         end
       end
     end
+
+### Generator
+
+Gem provide a rails generator for creating a simple SearchAdapter like a first one from previous section. Run follows command:
+
+    rails generate auto_select2:search_adapter TargetModelName --id-column=name_of_id_column  --text-columns=name_of_columns_for_searching_by
+
+Available options for generator:
+* id-column - name of model column with identifier;
+* text-columns - column for searching by (available multiple values, for example "--text-columns=name description" without coma);
+* hash-method - instance method of model for converting into Hash for transporting into select2 (optional);
+* destination-path - path for storing SearchAdapter classes (optional, default: 'app/select2_search_adapters').
 
 ### More about SearchAdapter
 
