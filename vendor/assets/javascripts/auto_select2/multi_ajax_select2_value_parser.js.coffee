@@ -7,9 +7,13 @@ jQuery ($) ->
       data = $multi.select2('data')
       name = $multi.attr('name')
       $multi.remove()
-      # Create hidden fields with array like names
-      for item in data
-        $form.append $('<input/>', type: 'hidden', name: "#{name}[]", value: item.id)
+      if data.length == 0
+        # Create hidden field with blank value for detect clean select2 on server side
+        $form.append $('<input/>', type: 'hidden', name: "#{name}[]", value: '')
+      else
+        # Create hidden fields with array-like names
+        for item in data
+          $form.append $('<input/>', type: 'hidden', name: "#{name}[]", value: item.id)
       return
     return
   return
