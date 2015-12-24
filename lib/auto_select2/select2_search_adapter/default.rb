@@ -21,6 +21,8 @@ module AutoSelect2
                 total: default_count
             }
           else
+            options[:id_column] = @id_column
+            options[:text_columns] = @text_columns
             get_init_values(
                 @searchable_class,
                 options[:item_ids],
