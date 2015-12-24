@@ -1,16 +1,19 @@
 jQuery ($) ->
-  # Tune input fields before submitting form, change csv values into input elements with array names
-  $('input.auto-ajax-select2.multiple').closest('form').submit ->
-    $form = $(@) # save a reference to the form for later usage
-    $('input.auto-ajax-select2.multiple').each ->
+# Tune input fields before submitting form, change csv values into input elements with array names
+  $(document).on 'submit', 'form', ->
+    $form = $(@)
+    $('input.auto-ajax-select2.multiple:enabled').each ->
       $multi = $(@)
       data = $multi.select2('data')
       name = $multi.attr('name')
       $multi.remove()
-      # Create hidden fields with array like names
-      $form.append $.map(data, (obj)->
-        $('<input/>', type: 'hidden', name: "#{name}[]", value: obj.id)
-      )
+      if data.length == 0
+        # Create hidden field with blank value for detect clean select2 on server side
+        $form.append $('<input/>', type: 'hidden', name: "#{name}[]", value: '')
+      else
+        # Create hidden fields with array-like names
+        for item in data
+          $form.append $('<input/>', type: 'hidden', name: "#{name}[]", value: item.id)
       return
     return
   return
