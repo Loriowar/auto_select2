@@ -66,7 +66,7 @@ module AutoSelect2
 
         def get_init_values(searched_class, ids, options = {})
           hash_method = options[:hash_method]
-          text_columns = options[:text_columns]
+          text_columns = options[:text_columns] || []
           id_column = options[:id_column] || searched_class.primary_key
           ids = ids.split(',')
           if ids.size > 1
