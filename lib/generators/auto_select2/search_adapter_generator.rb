@@ -22,6 +22,10 @@ module AutoSelect2
                    type: :string,
                    desc: 'Instance method of model for converting into Hash for transporting into select2',
                    banner: 'to_select2'
+      class_option :case_sensitive,
+                   type: :boolean,
+                   desc: 'Is adapter request case sensitive or not',
+                   banner: 'case_sensitive'
 
       desc 'Creates SearchAdapter classes for your models'
       def create_search_adapter
@@ -47,6 +51,10 @@ module AutoSelect2
 
       def hash_method
         options[:hash_method]
+      end
+
+      def case_sensitive
+        options[:case_sensitive]
       end
     end
   end

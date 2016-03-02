@@ -19,7 +19,11 @@ module AutoSelect2
 
         def default_finder(searched_class, term, options)
           columns = options[:column].present? ? options[:column] : 'name'
-          conditions = default_search_conditions(term, options[:basic_conditions], columns)
+          conditions =
+              default_search_conditions(term,
+                                        options[:basic_conditions],
+                                        columns,
+                                        options.slice(:case_sensitive))
           if term.nil?
             [ searched_class.where(options[:basic_conditions]) ]
           else
@@ -35,14 +39,18 @@ module AutoSelect2
         end
 
         def default_count(searched_class, term, options = {})
-          conditions = default_search_conditions(term, options[:basic_conditions], options[:column] || 'name')
+          conditions =
+              default_search_conditions(term,
+                                        options[:basic_conditions],
+                                        options[:column] || 'name',
+                                        options.slice(:case_sensitive))
           query = searched_class.where(conditions)
           query = query.select(options[:select]) if options[:select].present?
           query = options[:uniq] ? query.uniq : query
           query.count
         end
 
-        def default_search_conditions(term, basic_conditions, columns)
+        def default_search_conditions(term, basic_conditions, columns, options = {})
           term_filter = ''
           conditions = []
           unless columns.is_a?(Array)
@@ -54,7 +62,11 @@ module AutoSelect2
               term_filter += ' AND ' if index > 0
               columns.each_with_index do |column, idx|
                 term_filter += ' OR ' if idx > 0
-                term_filter +=  "#{column} LIKE ?"
+                if options[:case_sensitive]
+                  term_filter +=  "#{column} LIKE ?"
+                else
+                  term_filter +=  "LOWER(#{column}) LIKE LOWER(?)"
+                end
                 conditions << "%#{word}%"
               end
             end

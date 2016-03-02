@@ -7,8 +7,17 @@ module AutoSelect2
             raise_not_implemented
           end
           if options[:init].nil?
-            default_values = default_finder(@searchable_class, term, page: page, column: @text_columns)
-            default_count = default_count(@searchable_class, term, column: @text_columns)
+            default_values =
+                default_finder(@searchable_class,
+                               term,
+                               page: page,
+                               column: @text_columns,
+                               case_sensitive: @case_sensitive.nil? ? options[:case_sensitive] : @case_sensitive)
+            total_count =
+                default_count(@searchable_class,
+                              term,
+                              column: @text_columns,
+                              case_sensitive: @case_sensitive.nil? ? options[:case_sensitive] : @case_sensitive)
             {
                 items: default_values.map do |default_value|
                   get_select2_hash(
@@ -18,7 +27,7 @@ module AutoSelect2
                       @text_columns
                   )
                 end,
-                total: default_count
+                total: total_count
             }
           else
             options[:id_column] = @id_column
@@ -47,6 +56,10 @@ module AutoSelect2
 
         def hash_method(method_sym)
           @select2_hash_method = method_sym
+        end
+
+        def case_sensitive(casi)
+          @case_sensitive = casi
         end
 
         def raise_not_implemented
