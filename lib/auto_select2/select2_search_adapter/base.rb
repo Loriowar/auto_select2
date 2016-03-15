@@ -58,17 +58,20 @@ module AutoSelect2
           end
           unless term.nil?
             words = term.split(' ')
+            # @ todo: needs to create arrays with conditions for words and columns and concatenate them in a properly way
             words.each_with_index do |word, index|
               term_filter += ' AND ' if index > 0
+              term_filter += '( ' if columns.any?
               columns.each_with_index do |column, idx|
                 term_filter += ' OR ' if idx > 0
                 if options[:case_sensitive]
-                  term_filter +=  "#{column} LIKE ?"
+                  term_filter += "#{column} LIKE ?"
                 else
-                  term_filter +=  "LOWER(#{column}) LIKE LOWER(?)"
+                  term_filter += "LOWER(#{column}) LIKE LOWER(?)"
                 end
                 conditions << "%#{word}%"
               end
+              term_filter += ' )' if columns.any?
             end
             term_filter = term_filter.empty? ? nil : "(#{term_filter})"
             basic_conditions_part = basic_conditions.present? ? "(#{basic_conditions }) " : nil
