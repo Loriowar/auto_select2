@@ -15,6 +15,13 @@ module AutoSelect2
       end
     end
 
+    def custom_select2_init_header_tags
+      unless @select2_custom_script_included
+        @select2_custom_script_included = true
+        javascript_include_tag('auto_select2/custom_select2')
+      end
+    end
+
     def static_select2_init_header_tags
       unless @select2_static_script_included
         @select2_static_script_included = true
