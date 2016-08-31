@@ -3,7 +3,7 @@ module AutoSelect2
     class Default < Base
       class << self
         def search_default(term, page, options)
-          if @searchable_class.blank? || @id_column.blank? || @text_columns.blank?
+          if !@searchable_class || @id_column.blank? || @text_columns.blank?
             raise_not_implemented
           end
           if options[:init].nil?
