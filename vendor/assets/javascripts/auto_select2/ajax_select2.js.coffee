@@ -37,9 +37,10 @@ jQuery ($) ->
 
   window.initAutoAjaxSelect2 = ->
     # @todo: need to refactor this hell
-    $inputs = $('input.auto-ajax-select2').not('.select2-offscreen')
+    $inputs = $('input.auto-ajax-select2')
     $inputs.each ->
       $input = $(this)
+      return if $input.data('select2')
       path = $input.data('s2-href')
       limit = $input.data('s2-limit') || 25
       customFormatSelection = $input.data('s2-format-selection')

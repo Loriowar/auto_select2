@@ -1,8 +1,9 @@
 jQuery ($) ->
   window.initAutoStaticSelect2 = ->
-    $("select.auto-static-select2").not(".select2-offscreen").each (index, el) ->
-      $el = $(el)
-      s2UserOptions = $el.data("s2options")
+    $("select.auto-static-select2").each ->
+      $input = $(this)
+      return if $input.data('select2')
+      s2UserOptions = $input.data("s2options")
 
       s2DefaultOptions =
         allowClear: true
@@ -13,7 +14,7 @@ jQuery ($) ->
       else
         s2FullOptions = $.extend({}, s2DefaultOptions, s2UserOptions)
 
-      $el.select2(s2FullOptions)
+      $input.select2(s2FullOptions)
 
       return
     return

@@ -1,7 +1,8 @@
 jQuery ($) ->
   window.initAutoDataSelect2 = ->
-    $('input.auto-data-select2').not('.select2-offscreen').each ->
+    $('input.auto-data-select2').each ->
       $input = $(this)
+      return if $input.data('select2')
       customFormatSelection = $input.data('s2-format-selection')
       customFormatResult = $input.data('s2-format-result')
       if customFormatSelection isnt `undefined` && (window[customFormatSelection] isnt `undefined`)
