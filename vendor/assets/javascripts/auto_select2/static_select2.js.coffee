@@ -19,12 +19,12 @@ jQuery ($) ->
     return
   initAutoStaticSelect2()
 
-  $body = $('body')
-  $body.on 'ajaxSuccess', ->
+  $document = $(document)
+  $document.on 'ajaxSuccess', ->
     initAutoStaticSelect2()
     return
 
-  $body.on 'cocoon:after-insert', ->
+  $document.on 'cocoon:after-insert', ->
     initAutoStaticSelect2()
     return
   return

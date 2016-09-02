@@ -18,12 +18,12 @@ jQuery ($) ->
   initAutoDataSelect2()
 
 
-  $body = $('body')
-  $body.on 'ajaxSuccess', ->
+  $document = $(document)
+  $document.on 'ajaxSuccess', ->
     initAutoDataSelect2()
     return
 
-  $body.on 'cocoon:after-insert', ->
+  $document.on 'cocoon:after-insert', ->
     initAutoDataSelect2()
     return
   return

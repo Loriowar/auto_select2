@@ -126,12 +126,12 @@ jQuery ($) ->
     return
   initAutoAjaxSelect2()
 
-  $body = $('body')
-  $body.on 'ajaxSuccess', ->
+  $document = $(document)
+  $document.on 'ajaxSuccess', ->
     initAutoAjaxSelect2()
     return
 
-  $body.on 'cocoon:after-insert', ->
+  $document.on 'cocoon:after-insert', ->
     initAutoAjaxSelect2()
     return
   return
