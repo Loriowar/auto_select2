@@ -66,9 +66,7 @@ jQuery ($) ->
           dataType: 'json',
           data: (term, page) ->
             ajaxData = { term: term, page: page }
-            $this = $(this.context)
-
-            additionalUserData = $this.data('s2-options')
+            additionalUserData = $input.data('s2-options')
             paramsCollection = {}
             if additionalUserData isnt `undefined`
               additionalAjaxData = additionalUserData['additional_ajax_data']
@@ -80,7 +78,7 @@ jQuery ($) ->
                   paramsCollection[$el.attr('name')] = $el.val()
                   return
                 $.extend(paramsCollection, additionalAjaxData['params'], functionCollection)
-                delete paramsCollection[$this.attr('name')]
+                delete paramsCollection[$input.attr('name')]
 
             return $.extend({}, paramsCollection, ajaxData)
           ,
