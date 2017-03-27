@@ -13,6 +13,15 @@ jQuery ($) ->
         s2FullOptions = $.extend({}, s2DefaultOptions)
       else
         s2FullOptions = $.extend({}, s2DefaultOptions, s2UserOptions)
+        customFormatSelection = s2UserOptions.formatSelection
+        customFormatResult = s2UserOptions.formatResult
+
+      if customFormatSelection isnt `undefined` && (window[customFormatSelection] isnt `undefined`)
+        formatSelectionFunc = window[customFormatSelection]
+      if (customFormatResult isnt `undefined`) && (window[customFormatResult] isnt `undefined`)
+        formatResultFunc = window[customFormatResult]
+
+      s2FullOptions = $.extend({}, s2FullOptions, {formatSelection: formatSelectionFunc, formatResult: formatResultFunc})
 
       $input.select2(s2FullOptions)
 
