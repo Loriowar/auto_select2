@@ -35,6 +35,22 @@ jQuery ($) ->
       result = '<span class="'+classes.join(' ')+'">'+item.text+'</span>'
     result
 
+  window.paramsCollection = ($input)->
+    additionalUserData = $input.data('s2-options')
+    paramsCollection = {}
+    if additionalUserData isnt `undefined`
+      additionalAjaxData = additionalUserData['additional_ajax_data']
+      if additionalAjaxData isnt `undefined`
+        if typeof window[additionalAjaxData['function']] == "function"
+          functionCollection = window[additionalAjaxData['function']]($input, term)
+        $(additionalAjaxData['selector']).each (index, el) ->
+          $el = $(el)
+          paramsCollection[$el.attr('name')] = $el.val()
+          return
+        $.extend(paramsCollection, additionalAjaxData['params'], functionCollection)
+        delete paramsCollection[$input.attr('name')]
+    paramsCollection
+
   window.initAutoAjaxSelect2 = ->
     # @todo: need to refactor this hell
     $inputs = $('input.auto-ajax-select2')
@@ -66,21 +82,7 @@ jQuery ($) ->
           dataType: 'json',
           data: (term, page) ->
             ajaxData = { term: term, page: page }
-            additionalUserData = $input.data('s2-options')
-            paramsCollection = {}
-            if additionalUserData isnt `undefined`
-              additionalAjaxData = additionalUserData['additional_ajax_data']
-              if additionalAjaxData isnt `undefined`
-                if typeof window[additionalAjaxData['function']] == "function"
-                  functionCollection = window[additionalAjaxData['function']]($input, term)
-                $(additionalAjaxData['selector']).each (index, el) ->
-                  $el = $(el)
-                  paramsCollection[$el.attr('name')] = $el.val()
-                  return
-                $.extend(paramsCollection, additionalAjaxData['params'], functionCollection)
-                delete paramsCollection[$input.attr('name')]
-
-            return $.extend({}, paramsCollection, ajaxData)
+            return $.extend({}, paramsCollection($input), ajaxData)
           ,
           results: (data, page) ->
             more = (page * limit) < data.total
@@ -94,14 +96,14 @@ jQuery ($) ->
           initSelectionClassName = $element.data('init-selection-class-name')
           if (id != '')
             if initText != undefined
-              params = { id: id, text: initText }
+              params = {id: id, text: initText}
               if initClassName != undefined
                 params.class_name = initClassName
                 params.selection_class_name = initSelectionClassName
               callback(params)
             else
               $.ajax(path, {
-                data: { init: true, item_ids: id },
+                data: $.extend({}, paramsCollection($element), {init: true, item_ids: id}),
                 dataType: "json"
               }).done((data) ->
                 if(data != null)
@@ -123,6 +125,7 @@ jQuery ($) ->
 
       return
     return
+
   initAutoAjaxSelect2()
 
   $document = $(document)
