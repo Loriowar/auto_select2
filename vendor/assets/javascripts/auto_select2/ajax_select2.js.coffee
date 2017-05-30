@@ -35,9 +35,9 @@ jQuery ($) ->
       result = '<span class="'+classes.join(' ')+'">'+item.text+'</span>'
     result
 
-  window.paramsCollection = ($input)->
+  window.paramsCollection = ($input, term)->
     additionalUserData = $input.data('s2-options')
-    paramsCollection = {}
+    collection = {}
     if additionalUserData isnt `undefined`
       additionalAjaxData = additionalUserData['additional_ajax_data']
       if additionalAjaxData isnt `undefined`
@@ -45,11 +45,11 @@ jQuery ($) ->
           functionCollection = window[additionalAjaxData['function']]($input, term)
         $(additionalAjaxData['selector']).each (index, el) ->
           $el = $(el)
-          paramsCollection[$el.attr('name')] = $el.val()
+          collection[$el.attr('name')] = $el.val()
           return
-        $.extend(paramsCollection, additionalAjaxData['params'], functionCollection)
-        delete paramsCollection[$input.attr('name')]
-    paramsCollection
+        $.extend(collection, additionalAjaxData['params'], functionCollection)
+        delete collection[$input.attr('name')]
+    collection
 
   window.initAutoAjaxSelect2 = ->
     # @todo: need to refactor this hell
@@ -81,12 +81,12 @@ jQuery ($) ->
           url: path,
           dataType: 'json',
           data: (term, page) ->
-            ajaxData = { term: term, page: page }
-            return $.extend({}, paramsCollection($input), ajaxData)
+            ajaxData = {term: term, page: page}
+            return $.extend({}, paramsCollection($input, term), ajaxData)
           ,
           results: (data, page) ->
             more = (page * limit) < data.total
-            return { results: data.items, more: more }
+            return {results: data.items, more: more}
         },
         initSelection : (element, callback) ->
           $element = $(element)
@@ -103,7 +103,7 @@ jQuery ($) ->
               callback(params)
             else
               $.ajax(path, {
-                data: $.extend({}, paramsCollection($element), {init: true, item_ids: id}),
+                data: $.extend({}, paramsCollection($element, ''), {init: true, item_ids: id}),
                 dataType: "json"
               }).done((data) ->
                 if(data != null)
