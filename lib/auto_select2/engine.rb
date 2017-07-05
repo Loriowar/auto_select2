@@ -4,7 +4,7 @@ module AutoSelect2
 
     initializer :javascripts do |app|
       app.config.assets.precompile +=
-          %w[auto_select2/auto_select2.js auto_select2/auto_select2_ajax.js]
+        %w[auto_select2/auto_select2.js auto_select2/auto_select2_ajax.js]
     end
   end
 end
