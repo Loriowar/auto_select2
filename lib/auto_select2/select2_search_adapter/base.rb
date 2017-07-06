@@ -25,7 +25,7 @@ module AutoSelect2
                                         columns,
                                         options.slice(:case_sensitive))
           if term.nil?
-            [ searched_class.where(options[:basic_conditions]) ]
+            searched_class.where(options[:basic_conditions])
           else
             skip_count = 0
             unless options.nil? || options[:page].nil?
