@@ -1,2 +1,8 @@
+AllCops:
+  TargetRubyVersion: 2.3
 Layout/EndOfLine:
   EnforcedStyle: lf
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+Style/Documentation:
+  Enabled: false
