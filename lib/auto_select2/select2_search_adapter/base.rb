@@ -110,7 +110,7 @@ module AutoSelect2
 
         def column_filters
           searchable_columns.map do |column|
-            "LOWER(#{column}) LIKE LOWER(?)"
+            "LOWER(#{searchable.table_name}.#{column}) LIKE LOWER(?)"
           end.join(' OR ')
         end
       end
