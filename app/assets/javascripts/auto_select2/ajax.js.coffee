@@ -7,6 +7,8 @@ jQuery ($) ->
       options = $input.data('auto-select2')
       href = options.href
       delete options.href
+      extra = options.extra || {}
+      delete options.extra
 
       defaultOptions =
         allowClear: true
@@ -14,9 +16,7 @@ jQuery ($) ->
         ajax:
           url: href
           data: (params) ->
-            term: params.term
-            page: params.page
-
+            $.extend({}, extra, term: params.term, page: params.page)
           dataType: 'json'
           delay: 250
           cache: true
