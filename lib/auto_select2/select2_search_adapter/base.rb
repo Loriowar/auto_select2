@@ -45,6 +45,10 @@ module AutoSelect2
       self.limit = 25
 
       class << self
+        def type
+          name.sub('SearchAdapter', '').underscore
+        end
+
         def search(term, page, **options)
           page ||= 1
           list = find(term, page, **options)
@@ -75,6 +79,14 @@ module AutoSelect2
             relation(term, **options).order(order).offset(offset).limit(limit)
           else
             relation(term, **options).order(order)
+          end
+        end
+
+        def init(ids, **options)
+          return [] if ids.blank?
+
+          format_list(Array(searchable.find(ids)), **options).map do |item|
+            item.merge(selected: true)
           end
         end
 
