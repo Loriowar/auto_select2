@@ -3,7 +3,7 @@ jQuery ($) ->
     $("select.auto-static-select2").each ->
       $input = $(this)
       return if $input.data('select2')
-      s2UserOptions = $input.data("s2options")
+      s2UserOptions = $input.data("s2-options")
 
       s2DefaultOptions =
         allowClear: true
