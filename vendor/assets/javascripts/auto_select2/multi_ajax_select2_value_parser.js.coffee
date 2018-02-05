@@ -2,7 +2,7 @@ jQuery ($) ->
 # Tune input fields before submitting form, change csv values into input elements with array names
   $(document).on 'submit', 'form', ->
     $form = $(@)
-    $('input.auto-ajax-select2.multiple:enabled').each ->
+    $form.find($('input.auto-ajax-select2.multiple:enabled')).each ->
       $multi = $(@)
       data = $multi.select2('data')
       name = $multi.attr('name')
